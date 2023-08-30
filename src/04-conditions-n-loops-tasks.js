@@ -415,17 +415,17 @@ function getCommonDirectoryPath(pathes) {
  */
 function getMatrixProduct(m1, m2) {
   const arr = [];
-  arr.length = m1.length;
 
-  for (let i = 0; i < arr.length; i += 1) {
-    arr[i] = new Array(m2[i].length);
-    for (let j = 0; j < m1.length; j += 1) {
+  for (let i = 0; i < m1.length; i += 1) {
+    arr[i] = new Array(m2[0].length);
+    for (let j = 0; j < m2[0].length; j += 1) {
       arr[i][j] = 0;
       for (let k = 0; k < m2.length; k += 1) {
         arr[i][j] += m1[i][k] * m2[k][j];
       }
     }
   }
+
   return arr;
 }
 
@@ -460,8 +460,27 @@ function getMatrixProduct(m1, m2) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  const getCols = (index) => position.map((item) => item[index]).flat();
+  const lines = [...position, ...[0, 1, 2].map(getCols)];
+
+  const diagonals = [
+    [position[0][0], position[1][1], position[2][2]],
+    [position[0][2], position[1][1], position[2][0]],
+  ];
+
+  const allLines = [...lines, ...diagonals];
+
+  let result;
+  allLines.forEach((item) => {
+    const symbol = item[0];
+    if ((symbol === 'X' || symbol === '0') && item.length === 3) {
+      if (item.every((i) => i === symbol)) {
+        result = symbol;
+      }
+    }
+  });
+  return result || undefined;
 }
 
 
